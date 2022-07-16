@@ -1,16 +1,22 @@
 #ifndef __MONTY_H__
 #define __MONTY_H__
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/uio.h>
+#include <ctype.h>
+#include <fcntl.h>
 
 #define STACK 0
 #define QUEUE 1
 #define DELIMS " \n\t\a\b"
 
-/* GLOBAL OPCODE TOKENS */
-extern char **op_toks;
+/* Global OPCODE Tokens */
+extern char **opcode_tok;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -19,13 +25,13 @@ extern char **op_toks;
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO Holberton project
+ * for stack, queues, LIFO, FIFO
  */
 typedef struct stack_s
 {
-	int n;
-	struct stack_s *prev;
-	struct stack_s *next;
+int n;
+struct stack_s *prev;
+struct stack_s *next;
 } stack_t;
 
 /**
@@ -34,15 +40,15 @@ typedef struct stack_s
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO Holberton project
+ * for stack, queues, LIFO, FIFO
  */
 typedef struct instruction_s
 {
-	char *opcode;
-	void (*f)(stack_t **stack, unsigned int line_number);
+char *opcode;
+void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/* PRIMARY INTERPRETER FUNCTIONS */
+/*Main Functions*/
 void free_stack(stack_t **stack);
 int init_stack(stack_t **stack);
 int check_mode(stack_t *stack);
@@ -51,7 +57,7 @@ unsigned int token_arr_len(void);
 int run_monty(FILE *script_fd);
 void set_op_tok_error(int error_code);
 
-/* OPCODE FUNCTIONS */
+/*Monty functions*/
 void monty_push(stack_t **stack, unsigned int line_number);
 void monty_pall(stack_t **stack, unsigned int line_number);
 void monty_pint(stack_t **stack, unsigned int line_number);
@@ -70,11 +76,11 @@ void monty_rotr(stack_t **stack, unsigned int line_number);
 void monty_stack(stack_t **stack, unsigned int line_number);
 void monty_queue(stack_t **stack, unsigned int line_number);
 
-/* CUSTOM STANDARD LIBRARY FUNCTIONS */
+/* Custom lib functions */
 char **strtow(char *str, char *delims);
 char *get_int(int n);
 
-/* ERROR MESSAGES & ERROR CODES */
+/* Error handling */
 int usage_error(void);
 int malloc_error(void);
 int f_open_error(char *filename);
