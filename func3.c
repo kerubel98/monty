@@ -1,116 +1,56 @@
 #include "monty.h"
 
 /**
- * monty_add - adds the first 2 elements of stack
+ * monty_nop - No function
  * @stack: pointer to a stack
  * @line_number: current working line of monty bytecode
  *
- * Description: stores the sum to the second node int inthe list
- *and pops the stack
  * Return: none
  */
-void monty_add(stack_t **stack, unsigned int line_number)
+void monty_nop(stack_t **stack, unsigned int line_number)
 {
-if ((*stack)->next == NULL || (*stack)->next->next == NULL)
-{
-set_op_tok_error(short_stack_error(line_number, "add"));
-return;
-}
-
-(*stack)->next->next->n += (*stack)->next->n;
-monty_pop(stack, line_number);
+(void)stack;
+(void)line_number;
 }
 
 /**
- * monty_sub - subracts the first 2 elements of stack
+ * monty_pchar - prints the top char in a stack
  * @stack: pointer to a stack
  * @line_number: current working line of monty bytecode
  *
- * Description: stores the difference to the second node int inthe list
- *              and pops the stack
  * Return: none
  */
-void monty_sub(stack_t **stack, unsigned int line_number)
+void monty_pchar(stack_t **stack, unsigned int line_number)
 {
-if ((*stack)->next == NULL || (*stack)->next->next == NULL)
+if ((*stack)->next == NULL)
 {
-set_op_tok_error(short_stack_error(line_number, "sub"));
+set_op_tok_error(pchar_error(line_number, "stack empty"));
 return;
 }
-
-(*stack)->next->next->n -= (*stack)->next->n;
-monty_pop(stack, line_number);
+if ((*stack)->next->n < 0 || (*stack)->next->n > 127)
+{
+set_op_tok_error(pchar_error(line_number, "value out of range"));
+return;
+}
+printf("%c\n", (*stack)->next->n);
 }
 
 /**
- * monty_div - divides the second val to the top value
- * @stack: poiter to a stack
- * @line_number: current working line in monty bytecode
- *
- * Description: stores the quotient to the second node of the stack
- * Return: none
- */
-void monty_div(stack_t **stack, unsigned int line_number)
-{
-if ((*stack)->next == NULL || (*stack)->next->next == NULL)
-{
-set_op_tok_error(short_stack_error(line_number, "div"));
-return;
-}
-
-if ((*stack)->next->n == 0)
-{
-set_op_tok_error(div_error(line_number));
-return;
-}
-
-(*stack)->next->next->n /= (*stack)->next->n;
-monty_pop(stack, line_number);
-}
-
-/**
- * monty_mul - multiplies the first 2 elements of stack
+ * monty_pstr - prints a string contained in stack
  * @stack: pointer to a stack
  * @line_number: current working line of monty bytecode
  *
- * Description: stores the product to the second node int inthe list
- *              and pops the stack
  * Return: none
  */
-void monty_mul(stack_t **stack, unsigned int line_number)
+void monty_pstr(stack_t **stack, unsigned int line_number)
 {
-if ((*stack)->next == NULL || (*stack)->next->next == NULL)
-{
-set_op_tok_error(short_stack_error(line_number, "mul"));
-return;
-}
+stack_t *temp = (*stack)->next;
 
-(*stack)->next->next->n *= (*stack)->next->n;
-monty_pop(stack, line_number);
-}
-
-/**
- * monty_mod - divides the second val to the top value
- * @stack: poiter to a stack
- * @line_number: current working line in monty bytecode
- *
- * Description: stores the modulus result to the second node of the stack
- * Return: none
- */
-void monty_mod(stack_t **stack, unsigned int line_number)
+while (temp && temp->n != 0 && (temp->n && temp->n <= 127))
 {
-if ((*stack)->next == NULL || (*stack)->next->next == NULL)
-{
-set_op_tok_error(short_stack_error(line_number, "mod"));
-return;
+printf("%c", temp->n);
+temp = temp->next;
 }
-
-if ((*stack)->next->n == 0)
-{
-set_op_tok_error(div_error(line_number));
-return;
-}
-
-(*stack)->next->next->n %= (*stack)->next->n;
-monty_pop(stack, line_number);
+printf("\n");
+(void)line_number;
 }
